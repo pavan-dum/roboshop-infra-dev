@@ -1,5 +1,5 @@
 resource "aws_route53_record" "mongodb" {
-  zone_id = var.zone_id
+  zone_id = var.Zone_id
   name    = "mongodb-${var.Environment}.${var.domain_name}"
   type    = "A"
   ttl     = 1
@@ -8,7 +8,7 @@ resource "aws_route53_record" "mongodb" {
 }
 
 resource "aws_route53_record" "redis" {
-  zone_id = var.zone_id
+  zone_id = var.Zone_id
   name    = "redis-${var.Environment}.${var.domain_name}"
   type    = "A"
   ttl     = 1

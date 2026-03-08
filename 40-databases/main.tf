@@ -14,7 +14,7 @@ resource "aws_instance" "mongodb" {
    
 }
 
-resource "terraform_data" "bootstrap" {
+resource "terraform_data" "mongodb" {
   triggers_replace = [
     aws_instance.mongodb.id
   ]
@@ -28,7 +28,7 @@ connection {
 
 provisioner "file" {
   source = "bootstrap.sh" # local file path
-  destination = "tmp/bootstrap.sh"   # destination path on the rempote machine
+  destination = "/tmp/bootstrap.sh"   # destination path on the rempote machine
 }
 
   provisioner "remote-exec" {

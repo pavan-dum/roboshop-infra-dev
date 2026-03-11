@@ -29,7 +29,7 @@ resource "aws_lb_listener" "http" {
 
     fixed_response {
       content_type = "text/plain"
-      message_body = "<h1>backend-alb working fine</h>"
+      message_body = "<h1>backend-alb working fine</h1>"
       status_code  = "200"
     }
   }
@@ -38,7 +38,7 @@ resource "aws_lb_listener" "http" {
 
 resource "aws_route53_record" "backend_alb" {
   zone_id = var.Zone_id
-  name    = "*.backend-alb-{var.Environment}.${var.domain_name}"
+  name    = "*.backend-alb-${var.Environment}.${var.domain_name}"
   type    = "A"
   ttl     = 1
   

@@ -161,7 +161,7 @@ provisioner "file" {
   provisioner "remote-exec" {
     inline = [
       "chmod +x /tmp/bootstrap.sh",
-      "sudo sh /tmp/bootstrap.sh rabbitmq {{var.Environment}}"]
+      "sudo sh /tmp/bootstrap.sh rabbitmq ${var.Environment}"]
   }
 }
 

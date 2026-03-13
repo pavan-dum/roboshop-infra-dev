@@ -63,7 +63,7 @@ resource "aws_lb_target_group" "catalogue" {
 
   deregistration_delay = 60
 
-  health {
+  health_check {
     healthy_threshold = 2
     interval = 10 
     matcher = "200-299"
@@ -80,7 +80,7 @@ resource "aws_lb_target_group" "catalogue" {
 resource "aws_launch_template" "catalogue" {
   name = "${var.project}-${var.Environment}-catalogue"
 
-  image_id = "aws_ami_from_instance.catalogue.id"
+  image_id = aws_ami_from_instance.catalogue.id
   
   #once auto scaling is less traffic it will terminate the instance
   instance_initiated_shutdown_behavior = "terminate"
@@ -137,9 +137,9 @@ resource "aws_autoscaling_group" "catalogue" {
   force_delete              = false
   
   launch_template {
-    id = aws_launch_template.catalogue.id
-
-  }     
+  id      = aws_launch_template.catalogue.id
+  version = "$Latest"
+  }   
   vpc_zone_identifier       = [local.private_subnet_id]
 
   # we are adding catalogue to target group

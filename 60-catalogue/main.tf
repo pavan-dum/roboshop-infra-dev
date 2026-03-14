@@ -133,7 +133,7 @@ resource "aws_autoscaling_group" "catalogue" {
   min_size                  = 2
   health_check_grace_period = 120
   health_check_type         = "ELB"
-  desired_capacity          = 1
+  desired_capacity          = 2
   force_delete              = false
   
   launch_template {
@@ -203,7 +203,7 @@ resource "aws_lb_listener_rule" "catalogue" {
 
   condition {
     host_header {
-      values = ["catalogue.backend-alb- ${var.Environment}.${var.domain_name}"]
+      values = ["catalogue.backend-alb-${var.Environment}.${var.domain_name}"]
     }
   }
 }

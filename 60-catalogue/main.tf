@@ -145,9 +145,85 @@ resource "aws_autoscaling_group" "catalogue" {
   # we are adding catalogue to target group
   target_group_arns = [aws_lb_target_group.catalogue.arn]
 
-    tag {
-    key                 = "Name"
-    value               = "${var.project}-${var.Environment}-catalogue"
+  instance_refresh {
+    strategy = "Rolling"
+    preferences {
+      min_healthy_percentage = 50
+    }
+    triggers = ["launch_template"]
+  }
+
+  dynamic "tag" {
+
+    for_each = merge(
+        {
+          Name = "${var.project}-${var.Environment}-catalogue"
+        },
+        local.common_tags
+      )
+  
+  content {
+    key                 = tag.key
+    value               = tag.value
     propagate_at_launch = false
   }
+
+  }
+
+  # with in 15 min auto scaling should be successful
+  timeouts {
+    delete = "15m"
+  }
 }
+
+# auto scaling policy
+resource "aws_autoscaling_policy" "catalogue" {
+  autoscaling_group_name = aws_autoscaling_group.catalogue.name
+  name                   = "${var.project}-${var.Environment}-catalogue"
+  policy_type            = "TargetTrackingScaling"
+
+  target_tracking_configuration {
+    predefined_metric_specification {
+      predefined_metric_type = "ASGAverageCPUUtilization"
+    }
+
+    target_value = 70.0
+  }
+}
+  
+# listener rule this is depends on target group
+resource "aws_lb_listener_rule" "catalogue" {
+  listener_arn = local.backend_alb_listener_arn
+  priority     = 10
+
+  action {
+    type             = "forward"
+    target_group_arn = aws_lb_target_group.catalogue.arn
+  }
+
+  condition {
+    host_header {
+      values = ["catalogue.backend-alb- ${var.Environment}.${var.domain_name}"]
+    }
+  }
+}
+
+# destroy instance
+
+resource "terraform_data" "delete_instance" {
+
+  triggers_replace = [
+     aws_instance.catalogue.id
+  ]
+
+  depends_on = [aws_autoscaling_policy.catalogue]
+  
+  #it executes in bastion
+  provisioner "local-exec" {
+    command = "aws ec2 terminate-instances --instance-ids ${aws_instance.catalogue.id}"
+  }
+
+  
+}
+
+

@@ -18,7 +18,7 @@ resource "aws_lb" "frontend_alb" {
 
 
 
-resource "aws_lb_listener" "http" {
+resource "aws_lb_listener" "https" {
   load_balancer_arn = aws_lb.frontend_alb.arn
   port              = "443"
   protocol          = "HTTPS"

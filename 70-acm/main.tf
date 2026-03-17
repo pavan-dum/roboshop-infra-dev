@@ -1,0 +1,42 @@
+resource "aws_acm_certificate" "roboshop" {
+  domain_name       = "*.${var.domain_name}"
+  validation_method = "DNS"
+
+  tags = merge(
+        {
+          Name = "${var.project}-${var.Environment}-${var.domain_name}"
+        },
+        local.common_tags
+      )
+
+  lifecycle {
+    create_before_destroy = true
+  }
+}
+
+
+
+#records creation 
+resource "aws_route53_record" "roboshop" {
+  for_each = {
+    for dvo in aws_acm_certificate.roboshop.domain_validation_options : dvo.domain_name => {
+      name   = dvo.resource_record_name
+      record = dvo.resource_record_value
+      type   = dvo.resource_record_type
+    }
+  }
+
+  allow_overwrite = true
+  name            = each.value.name
+  records         = [each.value.record]
+  ttl             = 60
+  type            = each.value.type
+  zone_id         = aws_route53_zone.roboshop.zone_id
+}
+
+
+#certificate validation
+resource "aws_acm_certificate_validation" "roboshop" {
+  certificate_arn         = aws_acm_certificate.roboshop.arn
+  validation_record_fqdns = [for record in aws_route53_record.roboshop : record.fqdn]
+}

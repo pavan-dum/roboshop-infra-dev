@@ -9,6 +9,7 @@ resource "aws_security_group_rule" "bastion_internet" {
   security_group_id = local.bastion_sg_id
 }
 
+#Allow bastion server to SSH into Mongodb database
 resource "aws_security_group_rule" "mongodb_bastion" {
   type              = "ingress"
   from_port         = 22
@@ -19,6 +20,7 @@ resource "aws_security_group_rule" "mongodb_bastion" {
   security_group_id = local.mongodb_sg_id
 }
 
+# Catalogue application can connect to Mongodb database
 resource "aws_security_group_rule" "mongodb_catalogue" {
   type              = "ingress"
   from_port         = 27017
@@ -100,4 +102,15 @@ resource "aws_security_group_rule" "catalogue_backend_alb" {
   # Where traffic is coming from
   source_security_group_id = local.backend_alb_sg_id
   security_group_id = local.catalogue_sg_id
+}
+
+
+resource "aws_security_group_rule" "frontend_alb_internet" {
+  type              = "ingress"
+  from_port         = 443
+  to_port           = 443
+  protocol          = "tcp"
+  # Where traffic is coming from
+  codr_blocks = ["0.0.0.0/0"]
+  security_group_id = local.frontend_alb_sg_id
 }

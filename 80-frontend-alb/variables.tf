@@ -14,3 +14,5 @@ variable "Zone_id" {
 variable "domain_name" {
     default = "dpavan.online"
 }
+
+

@@ -30,7 +30,7 @@ resource "aws_lb_listener" "https" {
     type = "fixed-response"
 
     fixed_response {
-      content_type = "text/plain"
+      content_type = "text/html"
       message_body = "<h1>frontend-alb https working fine</h1>"
       status_code  = "200"
     }
@@ -40,7 +40,7 @@ resource "aws_lb_listener" "https" {
 
 resource "aws_route53_record" "frontend_alb" {
   zone_id = var.Zone_id
-  name    = "*.${var.Environment}.${var.domain_name}"
+  name    = "*.${var.domain_name}"
   type    = "A"
  
   

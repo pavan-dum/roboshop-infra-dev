@@ -34,7 +34,7 @@ provisioner "file" {
   provisioner "remote-exec" {
     inline = [
       "chmod +x /tmp/bootstrap.sh",
-      "sudo sh /tmp/bootstrap.sh mongodb"]
+      "sudo sh /tmp/bootstrap.sh mongodb ${var.Environment}"]
   }
 }
 
@@ -75,7 +75,7 @@ provisioner "file" {
   provisioner "remote-exec" {
     inline = [
       "chmod +x /tmp/bootstrap.sh",
-      "sudo sh /tmp/bootstrap.sh redis"]
+      "sudo sh /tmp/bootstrap.sh redis ${var.Environment}"]
   }
 }
 
@@ -119,7 +119,7 @@ provisioner "file" {
   provisioner "remote-exec" {
     inline = [
       "chmod +x /tmp/bootstrap.sh",
-      "sudo sh /tmp/bootstrap.sh mysql {{var.Environment}}"]
+      "sudo sh /tmp/bootstrap.sh mysql ${var.Environment}"]
   }
 }
 

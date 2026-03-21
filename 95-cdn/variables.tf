@@ -6,10 +6,11 @@ variable "Environment" {
     default = "dev"
 }
 
-variable "zone_id" {
-    default = "Z05013202FKF0ZL12WAOP"
+
+variable "Zone_id" {
+    default = "Z02160638EY77GSSE3BP"
 }
 
 variable "domain_name" {
-    default = "daws88s.online"
+    default = "dpavan.online"
 }

@@ -7,7 +7,7 @@ variable "Environment" {
 }
 
 
-variable "Zone_id" {
+variable "zone_id" {
     default = "Z02160638EY77GSSE3BP"
 }
 

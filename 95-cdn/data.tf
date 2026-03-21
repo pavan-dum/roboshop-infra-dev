@@ -9,3 +9,8 @@ data "aws_cloudfront_cache_policy" "cachingOptimized" {
 data "aws_ssm_parameter" "acm_certificate_arn" {
   name = "/${var.project}/${var.Environment}/frontend_alb_certificate_arn"
 }
+
+
+data "aws_cloudfront_origin_request_policy" "allViewer" {
+  name = "Managed-AllViewer"
+}

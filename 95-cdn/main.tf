@@ -25,6 +25,7 @@ resource "aws_cloudfront_distribution" "roboshop" {
 
     viewer_protocol_policy = "https-only"
     cache_policy_id = local.cachingDisabled
+    origin_request_policy_id = data.aws_cloudfront_origin_request_policy.allViewer.id 
   }
 
   # Cache behavior with precedence 0
@@ -36,6 +37,7 @@ resource "aws_cloudfront_distribution" "roboshop" {
 
     viewer_protocol_policy = "https-only"
     cache_policy_id = local.cachingOptimized
+    origin_request_policy_id = data.aws_cloudfront_origin_request_policy.allViewer.id
   }
 
   # Cache behavior with precedence 1
@@ -47,6 +49,7 @@ resource "aws_cloudfront_distribution" "roboshop" {
 
     viewer_protocol_policy = "https-only"
     cache_policy_id = local.cachingOptimized
+    origin_request_policy_id = data.aws_cloudfront_origin_request_policy.allViewer.id
   }
 
   price_class = "PriceClass_All"
